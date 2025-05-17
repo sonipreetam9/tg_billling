@@ -211,7 +211,7 @@
 
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="">
+                            <a class="nav-link menu-link" href="{{ route('invoice.list') }}">
                                 <i class="mdi mdi-layers"></i> <span>Invoice List</span>
                             </a>
 

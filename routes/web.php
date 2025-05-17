@@ -41,7 +41,8 @@ Route::group(['prefix' => 'software', 'middleware' => ['auth']], function () {
 
     Route::get('/make-invoice', [InvoiceController::class, 'make_invoice'])->name('make.invoice');
     Route::post('/view-invoice-post', [InvoiceController::class, 'make_invoice_post'])->name('make.invoice.post');
-    Route::get('/view-invoice', [InvoiceController::class, 'view_invoice'])->name('view.invoice');
+    Route::get('/view-invoice/{invoice_id}', [InvoiceController::class, 'view_invoice'])->name('view.invoice');
+    Route::get('/lift-of-invoice', [InvoiceController::class, 'invoice_list'])->name('invoice.list');
 
 });
 

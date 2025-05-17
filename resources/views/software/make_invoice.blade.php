@@ -26,12 +26,29 @@
                             <h4 class="card-title mb-0 flex-grow-1">Select Customer</h4>
 
                         </div><!-- end card header -->
-                        @if(Session::has('success'))
-                        <p class="alert alert-success">{{ Session::get('success') }}</p>
-                        @endif
-                        @if(Session::has('error'))
-                        <p class="alert alert-danger">{{ Session::get('error') }}</p>
-                        @endif
+                        <div class="p-3">
+                            @if(Session::has('success'))
+                            <p class="alert alert-success">{{ Session::get('success') }}</p>
+                            @endif
+                            @if(Session::has('error'))
+                            <p class="alert alert-danger">{{ Session::get('error') }}</p>
+                            @endif
+                            @if(Session::has('error-e'))
+                            <p class="alert alert-danger">{{ Session::get('error-e') }}</p>
+                            @endif
+                            @if ($errors->any())
+
+                            <div class="alert alert-danger">
+                                <strong>Oops! There are some mistakes:</strong>
+                                <ul class="mb-0 mt-2">
+                                    @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
+                        </div>
+
                         <div class="card-body">
                             <div class="live-preview">
                                 <div class="row gy-4">
@@ -146,6 +163,7 @@
                             </div>
 
                         </div><!-- end card header -->
+                        <input type="hidden" name="customer_tag_id" id="tag_id_input" value="">
 
                         <div class="card-body">
 
@@ -158,7 +176,7 @@
                                                 Product Details
                                             </th>
                                             <th scope="col" style="width: 120px;">
-                                                <div class="d-flex currency-select input-light align-items-center">
+                                                <div class="d-flex input-light align-items-center">
                                                     Rate (₹)
                                                 </div>
                                             </th>
@@ -168,44 +186,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="newlink">
-                                        <tr id="1" class="product">
-                                            <th scope="row" class="product-id">1</th>
-                                            <td class="text-start">
-                                                <div class="mb-2">
-                                                    <input type="text" class="form-control bg-light border-0"
-                                                        id="productName-1" placeholder="Product Name" required=""  name="product_name[]">
-                                                    <div class="invalid-feedback">
-                                                        Please enter a product name
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <input type="number"
-                                                    class="form-control product-price bg-light border-0"
-                                                    id="productRate-1" step="0.01" placeholder="0.00" required=""  name="product_rate[]">
-                                                <div class="invalid-feedback">
-                                                    Please enter a rate
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="input-step">
-                                                    <button type="button" class="minus">–</button>
-                                                    <input type="number" class="product-quantity" id="product-qty-1"
-                                                        value="1" readonly="" name="product_qty[]">
-                                                    <button type="button" class="plus">+</button>
-                                                </div>
-                                            </td>
-                                            <td class="text-end">
-                                                <div>
-                                                    <input type="text"
-                                                        class="form-control bg-light border-0 product-line-price"
-                                                        id="productPrice-1" placeholder="₹0.00" readonly="" name="product_price[]">
-                                                </div>
-                                            </td>
-                                            <td class="product-removal">
-                                                <a href="javascript:void(0)" class="btn btn-success">Delete</a>
-                                            </td>
-                                        </tr>
+
                                     </tbody>
                                     <tbody>
 
@@ -237,8 +218,9 @@
                                                                         <label class="form-label">{{ $gst->full_name }}
                                                                             ({{ $gst->charges }}%)</label>
                                                                         <input type="number" class="form-control"
-                                                                            value="{{ $gst->charges }}" disabled
-                                                                            data-gst="{{ $gst->charges }}">
+                                                                            value="" readonly
+                                                                            data-gst="{{ $gst->charges }}"
+                                                                            name="{{ $gst->name }}">
                                                                     </div>
                                                                 </div>
                                                                 @endforeach
@@ -343,6 +325,7 @@
                 success: function (response) {
                     $('#customer-into-card').removeClass('d-none');
                     $('#make-invoice-div').removeClass('d-none');
+                    $('#tag_id_input').val(`${tag_id}`);
 
                     $('#customer-into-card').html(`
                         <div class="row">
@@ -389,167 +372,148 @@
             });
         });
     });
-</script><script>
-    let count = 1;
-    let products = [];
+</script>
 
-    $('#gstcheckbox').on('change', function () {
-        $('.gst-div').toggle(this.checked);
-        calculateTotals();
-    });
+<script>
+    let count = 0;
+let products = [];
 
-    $('#discountcheckbox').on('change', function () {
-        $('.discout-div').toggle(this.checked);
-        if (!this.checked) {
-            $('#discount').val(0);
-        }
-        calculateTotals();
-    });
-
-   function new_link() {
-    count++;
+// Add new product row
+function new_link() {
+    const index = count++;
 
     const newRow = `
-        <tr id="${count}" class="product">
-            <th scope="row" class="product-id">${count}</th>
-            <td class="text-start">
-                <div class="mb-2">
-                    <input type="text" class="form-control bg-light border-0 product-name" name="product_name[${count}]" id="productName-${count}" placeholder="Product Name" required>
-                    <div class="invalid-feedback">Please enter a product name</div>
-                </div>
+        <tr id="row-${index}" class="product-row">
+            <th scope="row">${index + 1}</th>
+            <td>
+                <input type="text" class="form-control product-name" name="product_name[${index}]" data-index="${index}" placeholder="Product Name" required>
             </td>
             <td>
-                <input type="number" class="form-control product-price bg-light border-0" name="product_price[${count}]" id="productRate-${count}" step="0.01" placeholder="0.00" required>
-                <div class="invalid-feedback">Please enter a rate</div>
+                <input type="number" class="form-control product-rate" name="product_rate[${index}]" data-index="${index}" step="0.01" placeholder="0.00" required>
             </td>
             <td>
                 <div class="input-step">
-                    <button type="button" class="minus">–</button>
-                    <input type="number" class="product-quantity" name="product_qty[${count}]" id="product-qty-${count}" value="1" readonly>
-                    <button type="button" class="plus">+</button>
+                    <button type="button" class="minus" data-index="${index}">–</button>
+                    <input type="number" class="product-qty" name="product_qty[${index}]" data-index="${index}" value="1" readonly>
+                    <button type="button" class="plus" data-index="${index}">+</button>
                 </div>
             </td>
-            <td class="text-end">
-                <input type="text" class="form-control bg-light border-0 product-line-price" name="product_total[${count}]" id="productPrice-${count}" placeholder="₹0.00" readonly>
+            <td>
+                <input type="text" class="form-control product-total" name="product_total[${index}]" data-index="${index}" value="₹0.00" readonly>
             </td>
-            <td class="product-removal">
-                <a href="javascript:void(0)" class="btn btn-success delete-product">Delete</a>
+            <td>
+                <button type="button" class="btn btn-danger delete-product" data-index="${index}">Delete</button>
             </td>
-        </tr>`;
+        </tr>
+    `;
 
-    $("#newlink").append(newRow);
+    $('#newlink').append(newRow);
 
-    // Add product placeholder in products array
-    products.push({
-        id: count,
-        name: "",
+    // Add to array
+    products[index] = {
+        id: index,
+        name: '',
         rate: 0,
         qty: 1,
-        amount: 0
-    });
+        total: 0
+    };
 }
 
+// Update product total and array
+function updateProduct(index) {
+    const name = $(`.product-name[data-index="${index}"]`).val();
+    const rate = parseFloat($(`.product-rate[data-index="${index}"]`).val()) || 0;
+    const qty = parseInt($(`.product-qty[data-index="${index}"]`).val()) || 0;
+    const total = rate * qty;
 
-    $(document).on('click', '.plus, .minus', function () {
-        let qtyInput = $(this).siblings('.product-quantity');
-        let qty = parseInt(qtyInput.val()) || 0;
-        if ($(this).hasClass('plus')) qty++;
-        else if (qty > 0) qty--;
-        qtyInput.val(qty);
+    products[index] = {
+        id: index,
+        name: name,
+        rate: rate,
+        qty: qty,
+        total: total
+    };
 
-        updateAmount($(this));
-        calculateTotals();
+    $(`.product-total[data-index="${index}"]`).val(`₹${total.toFixed(2)}`);
+    calculateTotals();
+}
+
+// Quantity increase/decrease
+$(document).on('click', '.plus, .minus', function () {
+    const index = $(this).data('index');
+    const qtyInput = $(`.product-qty[data-index="${index}"]`);
+    let qty = parseInt(qtyInput.val());
+
+    if ($(this).hasClass('plus')) qty++;
+    else if (qty > 1) qty--;
+
+    qtyInput.val(qty);
+    updateProduct(index);
+});
+
+// Name & rate change update
+$(document).on('input', '.product-name, .product-rate', function () {
+    const index = $(this).data('index');
+    updateProduct(index);
+});
+
+// Delete product
+$(document).on('click', '.delete-product', function () {
+    const index = $(this).data('index');
+    $(`#row-${index}`).remove();
+    delete products[index]; // Remove from array
+    calculateTotals();
+});
+
+// Master total calculation
+function calculateTotals() {
+    let subtotal = 0;
+    products.forEach(p => {
+        if (p) subtotal += p.total;
     });
 
-    $(document).on('input', '.product-price', function () {
-        updateAmount($(this));
-        calculateTotals();
-    });
+    let discount = $('#discountcheckbox').is(':checked') ? parseFloat($('#discount').val()) || 0 : 0;
+    let gstOn = $('#gstcheckbox').is(':checked');
+    let totalTax = 0;
 
-    $('#discount').on('input', function () {
-        calculateTotals();
-    });
-
-    function updateAmount(elm) {
-        let row = elm.closest('tr');
-        let id = parseInt(row.attr('id'));
-        let rate = parseFloat(row.find('.product-price').val()) || 0;
-        let qty = parseInt(row.find('.product-quantity').val()) || 0;
-        let total = rate * qty;
-        row.find('.product-line-price').val(`₹${total.toFixed(2)}`);
-
-        // Update product in array
-        let product = products.find(p => p.id === id);
-        if (product) {
-            product.rate = rate;
-            product.qty = qty;
-            product.amount = total;
-        }
-    }
-
-    $(document).on('click', '.delete-product', function () {
-        let row = $(this).closest('tr');
-        let id = parseInt(row.attr('id'));
-        row.remove();
-
-        // Remove from products array
-        products = products.filter(p => p.id !== id);
-
-        calculateTotals();
-    });
-
-    $(document).on('input', '.product-name, .product-price', function () {
-        let row = $(this).closest('tr');
-        let id = parseInt(row.attr('id'));
-
-        let product = products.find(p => p.id === id);
-        if (product) {
-            product.name = row.find('.product-name').val();
-            product.rate = parseFloat(row.find('.product-price').val()) || 0;
-            product.qty = parseInt(row.find('.product-quantity').val()) || 1;
-            product.amount = product.rate * product.qty;
-            row.find('.product-line-price').val(`₹${product.amount.toFixed(2)}`);
-        }
-
-        calculateTotals();
-    });
-
-    function calculateTotals() {
-        let subtotal = 0;
-        let totalTax = 0;
-
-        $('.product-line-price').each(function () {
-            let price = parseFloat($(this).val().replace(/[₹,]/g, '')) || 0;
-            subtotal += price;
+    if (gstOn) {
+        $('.gst-div input').each(function () {
+            let gstPercent = parseFloat($(this).data('gst')) || 0;
+            let taxAmount = ((subtotal - discount) * gstPercent) / 100;
+            $(this).val(taxAmount.toFixed(2));
+            totalTax += taxAmount;
         });
-
-        const discountOn = $('#discountcheckbox').is(':checked');
-        let discount = discountOn ? parseFloat($('#discount').val()) || 0 : 0;
-
-        const gstOn = $('#gstcheckbox').is(':checked');
-
-        if (gstOn) {
-            $('.gst-div input').each(function () {
-                let gstPercent = parseFloat($(this).data('gst')) || 0;
-                let taxAmount = ((subtotal - discount) * gstPercent) / 100;
-                $(this).val(taxAmount.toFixed(2));
-                totalTax += taxAmount;
-            });
-        } else {
-            $('.gst-div input').val('');
-        }
-
-        let finalTotal = subtotal - discount + totalTax;
-
-        $('#cart-subtotal').val(`₹${subtotal.toFixed(2)}`);
-        $('#cart-discount').val(`₹${discount.toFixed(2)}`);
-        $('#cart-tax').val(`₹${totalTax.toFixed(2)}`);
-        $('#cart-total').val(`₹${finalTotal.toFixed(2)}`);
+    } else {
+        $('.gst-div input').val('');
     }
 
-    $(document).ready(function () {
-        calculateTotals();
-    });
+    let finalTotal = subtotal - discount + totalTax;
+
+    $('#cart-subtotal').val(`₹${subtotal.toFixed(2)}`);
+    $('#cart-discount').val(`₹${discount.toFixed(2)}`);
+    $('#cart-tax').val(`₹${totalTax.toFixed(2)}`);
+    $('#cart-total').val(`₹${finalTotal.toFixed(2)}`);
+}
+
+// GST & Discount toggle
+$('#gstcheckbox').on('change', function () {
+    $('.gst-div').toggle(this.checked);
+    calculateTotals();
+});
+
+$('#discountcheckbox').on('change', function () {
+    $('.discout-div').toggle(this.checked);
+    if (!this.checked) $('#discount').val(0);
+    calculateTotals();
+});
+
+$('#discount').on('input', function () {
+    calculateTotals();
+});
+
+$(document).ready(function () {
+    calculateTotals(); // Initial
+});
 </script>
 
 

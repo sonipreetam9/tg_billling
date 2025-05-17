@@ -6,12 +6,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">All customers</h4>
+                    <h4 class="mb-sm-0">All Invoice</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">All Customers</li>
+                            <li class="breadcrumb-item active">All Invoice</li>
                         </ol>
                     </div>
 
@@ -22,7 +22,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title mb-0">All Customers List</h5>
+                        <h5 class="card-title mb-0">All Invoice List</h5>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -30,32 +30,25 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Tag ID</th>
-                                        <th>Name</th>
-                                        <th>Business</th>
-                                        <th>Phone</th>
-                                        <th>Status</th>
+                                        <th>Invoice_Number</th>
+                                        <th>Customer_Name</th>
+                                        <th>Sub_total</th>
+                                        <th>Grand_total</th>
+                                        <th>Date</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($customers as $index=> $customer)
+                                    @foreach ($invoices as $index=> $invoice)
 
                                     <tr>
                                         <td>{{ $index+1 }}</td>
-                                        <td>{{ $customer->tag_id }}</td>
-                                        <td>{{ $customer->name }}</td>
-                                        <td>{{ $customer->business_name }}</td>
-                                        <td>{{ $customer->phone }}</td>
-                                        @if($customer->status==1)
-                                        <td><span class="badge bg-success">Active</span></td>
-
-                                        @else
-                                        <td><span class="badge bg-danger">Inactive</span></td>
-
-                                        @endif
-                                        <td><span class="badge bg-danger">View</span></td>
-
+                                        <td>{{ $invoice->invoice_number }}</td>
+                                        <td>{{ $invoice->customer->name }}</td>
+                                        <td>₹ {{ $invoice->sub_total }}</td>
+                                        <td>₹ {{ $invoice->grand_total }}</td>
+                                        <td>{{ $invoice->date }}</td>
+                                        <td><a href="{{ route('view.invoice',['invoice_id'=>$invoice->id]) }}" class="btn btn-success">View</a>  <a href="#view" class="btn btn-danger">Delete</a></td>
                                     </tr>
                                     @endforeach
 
