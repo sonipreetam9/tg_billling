@@ -10,8 +10,8 @@
                     <div class="hero-content">
                         <!-- Section Title Start -->
                         <div class="section-title">
-                            <h3 class="wow fadeInUp">TECH GEOMETRY OPC PVT. LTD.</h3>
-                            <h1 class="text-anime-style-2" data-cursor="-opaque">Pure drops perfect precision <span>care you can trust.</span></h1>
+                            <h3 class="wow fadeInUp">{{ $comp_full_name }}</h3>
+                            <h1 class="text-anime-style-2" data-cursor="-opaque">{{ $comp_name }} <span>care you can trust.</span></h1>
                             <p class="wow fadeInUp" data-wow-delay="0.2s">Experience the perfect balance of purity and precision with our premium oil droppers Designed for effortless application, our high-quality droppers ensure accurate dispensing, minimal waste, and maximum potency.</p>
                         </div>
                         <!-- Section Title End -->
@@ -20,7 +20,11 @@
                         <div class="hero-content-body wow fadeInUp" data-wow-delay="0.4s">
                             <!-- Hero Button Start -->
                             <div class="hero-btn">
-                                <a href="contact.html" class="btn-default btn-highlighted">Purchase Now</a>
+                                 @if(Auth::check())
+                                <a href="{{ route('dashboard') }}" class="btn-default btn-highlighted">Dashboard</a>
+                                @else
+                                <a href="{{ route('login') }}" class="btn-default btn-highlighted">Login Now</a>
+                                @endif>
                             </div>
                             <!-- Hero Button End -->
 
@@ -31,7 +35,7 @@
                                 </div>
                                 <div class="contact-now-box-content">
                                     <h3>Call Us</h3>
-                                    <p><a href="tel:+123468963">+91 - 123 468 963</a></p>
+                                    <p><a href="tel:{{ $comp_phone }}">{{ $comp_phone }}</a></p>
                                 </div>
                             </div>
                             <!-- Contact Now Box End -->
@@ -58,7 +62,7 @@
     <!-- Hero Section End -->
 
     <!-- About Us Section Start -->
-    <div class="about-us">
+    <div class="about-us d-none">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6">
@@ -138,7 +142,7 @@
     <!-- About Us Section End -->
 
     <!-- Why Choose us Section Start -->
-    <div class="why-choose-us">
+    <div class="why-choose-us d-none">
         <div class="container-fluid">
             <div class="row no-gutters">
                 <div class="col-lg-12">
@@ -216,7 +220,7 @@
     <!-- Why Choose us Section End -->
 
     <!-- Our Products Section Start -->
-    <div class="our-products">
+    <div class="our-products d-none">
         <div class="container">
             <div class="row section-row align-items-center">
                 <div class="col-lg-6">
@@ -315,7 +319,7 @@
     <!-- Our Product Section End -->
 
     <!-- What We Do Section Start -->
-    <div class="what-we-do dark-section">
+    <div class="what-we-do dark-section d-none">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6">
@@ -382,7 +386,7 @@
     <!-- What We Do Section End -->
 
     <!-- Our Key Points Section Start -->
-    <div class="our-key-points">
+    <div class="our-key-points d-none">
         <div class="container">
             <div class="row section-row align-items-center">
                 <div class="col-lg-6">
@@ -511,7 +515,7 @@
     <!-- Our Key Points Section End -->
 
     <!-- Premium Products Section Start -->
-    <div class="premium-products">
+    <div class="premium-products d-none">
         <div class="container">
             <div class="row">
                 <div class="col-lg-7">
@@ -614,7 +618,7 @@
     <!-- Premium Products Section End -->
 
     <!-- Our Benefits Section Start -->
-    <div class="our-benefits">
+    <div class="our-benefits d-none">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-5">
@@ -754,7 +758,7 @@
     <!-- Our Benefits Section End -->
 
     <!-- Cta Box Start -->
-    <div class="cta-box dark-section">
+    <div class="cta-box dark-section d-none">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
@@ -791,7 +795,7 @@
     <!-- Cta Box End -->
 
     <!-- Our Faqs Section Start -->
-    <div class="our-faqs">
+    <div class="our-faqs d-none">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6">

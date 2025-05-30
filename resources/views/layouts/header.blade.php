@@ -12,7 +12,7 @@
     <!-- Page Title -->
     <title>Tech Geometry</title>
     <!-- Favicon Icon -->
-    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo/tgfav.png') }}" />
     <!-- Google Fonts Css-->
     <link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
@@ -54,7 +54,7 @@
             <nav class="navbar navbar-expand-lg">
                 <div class="container">
                     <!-- Logo Start -->
-                    <a class="navbar-brand" href="index.html"
+                    <a class="navbar-brand" href="{{ route('main') }}"
                         style="background-color: white;padding:8px;border-radius:10px;">
                         <img src="images/logo/tglogobg.png" alt="Logo">
                     </a>

@@ -150,15 +150,14 @@
                             <div class="flex-shrink-0">
                                 <div class="form-check form-switch form-switch-success form-switch-md" dir="ltr">
                                     <label class="form-check-label" for="gstcheckbox">GST</label>
-                                    <input type="checkbox" class="form-check-input" id="gstcheckbox" name="get_no_off"
-                                        checked>
+                                    <input type="checkbox" class="form-check-input" id="gstcheckbox" name="get_no_off">
                                 </div>
                             </div>
                             <div class="flex-shrink-0 mx-4">
                                 <div class="form-check form-switch form-switch-success form-switch-md" dir="ltr">
                                     <label class="form-check-label" for="discountcheckbox">Discount</label>
                                     <input type="checkbox" class="form-check-input" id="discountcheckbox"
-                                        name="discount_on _off" checked>
+                                        name="discount_on _off">
                                 </div>
                             </div>
 
@@ -197,9 +196,16 @@
                                                         class="ri-add-fill me-1 align-bottom"></i> Add Item</a>
                                             </td>
                                         </tr>
-                                        <tr class="border-top border-top-dashed mt-2">
+                                        <tr>
+                                            <td colspan="2">
+                                                <label for="note">Note (Optional)</label>
+                                                <input type="text" class="form-control" name="note"
+                                                    placeholder="Any Note..." id="note">
+                                            </td>
+                                        </tr>
+                                        <tr class="border-top border-top-dashed mt-2   ">
                                             <td colspan="4">
-                                                <div class="card">
+                                                <div class="card tax-div">
 
                                                     <div class="card-body">
                                                         <div class="live-preview">
@@ -323,49 +329,55 @@
                     customer_tag: tag_id
                 },
                 success: function (response) {
-                    $('#customer-into-card').removeClass('d-none');
-                    $('#make-invoice-div').removeClass('d-none');
-                    $('#tag_id_input').val(`${tag_id}`);
+    $('#customer-into-card').removeClass('d-none');
+    $('#make-invoice-div').removeClass('d-none');
+    $('#tag_id_input').val(`${tag_id}`);
 
-                    $('#customer-into-card').html(`
-                        <div class="row">
-                            <div class="col-6 col-md-6">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title mb-3">Personal Info</h5>
-                                        <div class="table-responsive">
-                                            <table class="table table-borderless mb-0">
-                                                <tbody>
-                                                    <tr><th class="ps-0">Full Name :</th><td class="text-muted">${response.name}</td></tr>
-                                                    <tr><th class="ps-0">Mobile :</th><td class="text-muted">${response.phone}</td></tr>
-                                                    <tr><th class="ps-0">E-mail :</th><td class="text-muted">${response.email}</td></tr>
-                                                    <tr><th class="ps-0">Joining Date :</th><td class="text-muted">${response.joining_date}</td></tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md-6">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title mb-3">Business Info</h5>
-                                        <div class="table-responsive">
-                                            <table class="table table-borderless mb-0">
-                                                <tbody>
-                                                    <tr><th class="ps-0">Business Name :</th><td class="text-muted">${response.business_name}</td></tr>
-                                                    <tr><th class="ps-0">GST Number :</th><td class="text-muted">${response.gst_number}</td></tr>
-                                                    <tr><th class="ps-0">E-mail :</th><td class="text-muted">${response.email}</td></tr>
-                                                    <tr><th class="ps-0">Location :</th><td class="text-muted">${response.location}</td></tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+    // GST row बनाओ अगर valid हो
+    let gstRow = '';
+    if (response.gst_number !== "0" && response.gst_number !== null && response.gst_number !== "") {
+        gstRow = `<tr><th class="ps-0">GST Number :</th><td class="text-muted">${response.gst_number}</td></tr>`;
+    }
+
+    $('#customer-into-card').html(`
+        <div class="row">
+            <div class="col-6 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Personal Info</h5>
+                        <div class="table-responsive">
+                            <table class="table table-borderless mb-0">
+                                <tbody>
+                                    <tr><th class="ps-0">Full Name :</th><td class="text-muted">${response.name}</td></tr>
+                                    <tr><th class="ps-0">Mobile :</th><td class="text-muted">${response.phone}</td></tr>
+                                    <tr><th class="ps-0">E-mail :</th><td class="text-muted">${response.email}</td></tr>
+                                    <tr><th class="ps-0">Joining Date :</th><td class="text-muted">${response.joining_date}</td></tr>
+                                </tbody>
+                            </table>
                         </div>
-                    `);
-                },
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Business Info</h5>
+                        <div class="table-responsive">
+                            <table class="table table-borderless mb-0">
+                                <tbody>
+                                    <tr><th class="ps-0">Business Name :</th><td class="text-muted">${response.business_name}</td></tr>
+                                    ${gstRow}
+                                    <tr><th class="ps-0">E-mail :</th><td class="text-muted">${response.email}</td></tr>
+                                    <tr><th class="ps-0">Location :</th><td class="text-muted">${response.location}</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `);
+},
                 error: function (xhr) {
                     alert(xhr.responseJSON.error || "Something went wrong!");
                 }
@@ -498,12 +510,14 @@ function calculateTotals() {
 // GST & Discount toggle
 $('#gstcheckbox').on('change', function () {
     $('.gst-div').toggle(this.checked);
+    $('.tax-div').show();
     calculateTotals();
 });
 
 $('#discountcheckbox').on('change', function () {
     $('.discout-div').toggle(this.checked);
     if (!this.checked) $('#discount').val(0);
+    $('.tax-div').show();
     calculateTotals();
 });
 
@@ -513,6 +527,14 @@ $('#discount').on('input', function () {
 
 $(document).ready(function () {
     calculateTotals(); // Initial
+     $('#discount-check').prop('checked', false);
+     $('#gstcheckbox').prop('checked', false);
+
+
+    // डिस्काउंट डिव को hide करो
+    $('.discout-div').hide();
+    $('.gst-div').hide();
+    $('.tax-div').hide();
 });
 </script>
 

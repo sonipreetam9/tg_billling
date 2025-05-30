@@ -14,12 +14,12 @@
                     <!-- Footer Logo End -->
 
                     <div class="about-footer-content">
-                        <p>123 High Street, London, W1A 1AA, United Kingdom</p>
+                        <p>{{ $comp_address }}</p>
                     </div>
 
                     <div class="about-footer-contact">
-                        <a href="tel:123468963">+91 - 123 468 963</a>
-                        <a href="mailto:info@domain.com">info@domain.com</a>
+                        <a href="tel:{{ $comp_phone }}">{{ $comp_phone }}</a>
+                        <a href="mailto:{{ $comp_email }}">{{ $comp_email }}</a>
                     </div>
                 </div>
                 <!-- About Footer End -->

@@ -3,6 +3,9 @@
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 /*
@@ -43,6 +46,15 @@ Route::group(['prefix' => 'software', 'middleware' => ['auth']], function () {
     Route::post('/view-invoice-post', [InvoiceController::class, 'make_invoice_post'])->name('make.invoice.post');
     Route::get('/view-invoice/{invoice_id}', [InvoiceController::class, 'view_invoice'])->name('view.invoice');
     Route::get('/lift-of-invoice', [InvoiceController::class, 'invoice_list'])->name('invoice.list');
+
+
+    Route::get('/wallet', [WalletController::class, 'wallet'])->name('wallet.page');
+
+    Route::get('/make-purchase', [PurchaseController::class, 'make_purchase_page'])->name('make.purchase.page');
+    Route::post('/make-purchase-post', [PurchaseController::class, 'make_purchase'])->name('make.purchase.post');
+    Route::get('/lift-of-purchase', [PurchaseController::class, 'purchase_list'])->name('purchase.list');
+
+    Route::get('/transactions', [TransactionController::class, 'all_transactions'])->name('all.transactions');
 
 });
 

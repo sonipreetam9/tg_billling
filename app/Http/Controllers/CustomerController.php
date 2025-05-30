@@ -30,7 +30,7 @@ class CustomerController extends Controller
                 "state" => ['required', 'regex:/^[a-zA-Z\s]+$/'],
                 "country" => ['required', 'regex:/^[a-zA-Z\s]+$/'],
                 "pin_code" => ['required', 'digits:6'],
-                "gst_number" => ['required', 'regex:/^[0-9A-Z]{15}$/'],
+                "gst_number" => ['nullable', 'regex:/^[0-9A-Z]{15}$/'],
                 "address" => ['required', 'regex:/^[^@#\$%\"!\(\)_{}\[\]\\?]+$/'],
             ],
             [
@@ -52,7 +52,7 @@ class CustomerController extends Controller
                 "state" => $request->state,
                 "country" => $request->country,
                 "pincode" => $request->pin_code,
-                "gst_number" => $request->gst_number,
+                "gst_number" => $request->gst_number ?? 0,
                 "address" => $request->address
             ]);
 

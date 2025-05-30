@@ -116,8 +116,8 @@
                                     <div class="col-xxl-3 col-md-6">
                                         <div class="form-floating">
                                             <input type="text" class="form-control" id="gst_number" name="gst_number"
-                                                placeholder="" value="{{ old('gst_number') }}" required>
-                                            <label for="gst_number">GST Number</label>
+                                                placeholder="" value="{{ old('gst_number') }}">
+                                            <label for="gst_number">GST Number <span class="text-muted">(Optional)</span></label>
                                             @error('gst_number') <small class="text-danger">{{ $message }}</small>
                                             @enderror
                                         </div>
@@ -147,5 +147,27 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function () {
+    // Allow only 10 digits for phone
+    $('#phone').on('input', function () {
+        let value = $(this).val().replace(/\D/g, ''); // Remove non-digits
+        if (value.length > 10) {
+            value = value.slice(0, 10); // Limit to 10 digits
+        }
+        $(this).val(value);
+    });
+
+    // Allow only 6 digits for pin code
+    $('#pin_code').on('input', function () {
+        let value = $(this).val().replace(/\D/g, ''); // Remove non-digits
+        if (value.length > 6) {
+            value = value.slice(0, 6); // Limit to 6 digits
+        }
+        $(this).val(value);
+    });
+});
+</script>
 
 @endsection

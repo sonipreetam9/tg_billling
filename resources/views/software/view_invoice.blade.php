@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="images/favicon.png" rel="icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo/tgfav.png') }}" />
     <title>View Invoice</title>
 
     <!-- Web Fonts
@@ -46,8 +46,10 @@
                             <div class="col-6 fw-bold">{{ $invoice->invoice_number }}</div>
                             <div class="col-5">Date <span class="float-end">:</span></div>
                             <div class="col-6 fw-bold">{{ $invoice->date }}</div>
+                            @if(!$gst_on_off==0)
                             <div class="col-5">GSTIN<span class="float-end">:</span></div>
                             <div class="col-6 fw-bold">{{ $comp_gst }}</div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -68,7 +70,12 @@
                                             Person Name : {{ $invoice->customer->name }}<br />
                                             Phone : +91 {{ $invoice->customer->phone }}<br />
                                             Email: {{ $invoice->customer->email }}<br />
+                                            @if($invoice->customer->gst_number != 0 && $invoice->customer->gst_number
+                                            !=null && $invoice->customer->gst_number != "")
                                             GSTIN : {{ $invoice->customer->gst_number }}
+                                            @endif
+
+
                                         </address>
                                     </div>
                                 </div>
@@ -138,14 +145,18 @@
                             <td class="col-7 text-1"><span class="fw-600">Bill Amount:</span> <i>{{ $amount_in_word
                                     }}</i></td>
                             <td class="col-5 pe-1">
+                                @if($invoice->gst_yes=="on")
                                 Central Tax: <small>({{ $invoice->cgst_charge }}%)</small> <span class="float-end">₹ {{
                                     $invoice->cgst }}</span><br>
                                 State Tax: <small>({{ $invoice->sgst_charge }}%)</small> <span class="float-end">₹ {{
                                     $invoice->sgst }}</span>
+                                @endif
+
+
                             </td>
                         </tr>
                         <tr>
-                            <td class="col-7 text-1">Note :</td>
+                            <td class="col-7 text-1 text-success">Note : {{ $invoice->note }}</td>
                             <td class="col-5 pe-1 bg-light fw-600">
                                 Grand Total:<span class="float-end">₹ {{ $invoice->grand_total }}</span>
                             </td>

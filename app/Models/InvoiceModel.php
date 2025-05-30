@@ -23,6 +23,7 @@ class InvoiceModel extends Model
         'sgst',
         'cgst_charge',
         'sgst_charge',
+        'note',
         'date',
     ];
 
